@@ -1,5 +1,5 @@
 import "./css/App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom"; 
 import { useState } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -9,22 +9,22 @@ function App() {
   const [user, setUser] = useState(null);
 
   return (
-    <BrowserRouter>
+    <HashRouter> 
       <Routes>
         <Route 
           path="/"
-          element={user ? <Home/> : <Navigate to="/login" replace/>}
+          element={user ? <Home /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/login"
-          element={<Login onLogin={setUser}/>}
+          element={<Login onLogin={setUser} />}
         />
         <Route
           path="/register"
-          element={<Register/>}
+          element={<Register />}
         />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

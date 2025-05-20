@@ -11,7 +11,7 @@ export default function Login({ onLogin }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:4000/api/login", {
+      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -22,7 +22,7 @@ export default function Login({ onLogin }) {
       if (!res.ok) {
         setError(data.error || "Login failed");
       } else {
-        onLogin({ email: data.email }); // Or use the full user object if needed
+        onLogin({ email: data.email }); 
         navigate("/"); // Redirect to homepage or dashboard
       }
     } catch (err) {
