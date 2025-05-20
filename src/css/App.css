@@ -1,0 +1,11 @@
+#title {
+  text-align: center;
+}
+#rent-tool-btn {
+  border-radius: 10px;
+  font-size: 2rem;
+  margin: 0 auto;
+  display: block;
+  padding: 10px 20px;
+  cursor: pointer;
+}
