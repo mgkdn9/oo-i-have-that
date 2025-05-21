@@ -1,5 +1,5 @@
-export default function Home() {
+export default function Home({user}) {
   return <>
-  <h1>Welcome [name], you're logged in!</h1>
+  <h1>Welcome {user.firstName}, you're logged in!</h1>
   </>
 }

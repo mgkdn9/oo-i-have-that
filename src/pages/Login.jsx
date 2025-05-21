@@ -12,6 +12,7 @@ export default function Login({ onLogin }) {
 
     try {
       const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/login", {
+      // const res = await fetch("http://localhost:4000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -22,7 +23,7 @@ export default function Login({ onLogin }) {
       if (!res.ok) {
         setError(data.error || "Login failed");
       } else {
-        onLogin({ email: data.email }); 
+        onLogin({ email: data.email, firstName: data.firstName, lastName: data.lastName }); 
         navigate("/"); // Redirect to homepage or dashboard
       }
     } catch (err) {

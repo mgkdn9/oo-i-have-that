@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -11,10 +13,11 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:4000/api/register", {
+      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/register", {
+      // const res = await fetch("http://localhost:4000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, firstName, lastName, password }),
       });
 
       const data = await res.json();
@@ -41,6 +44,20 @@ export default function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         /><br />
+        <input
+          type="text"
+          placeholder="First Name"
+          required
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        /><br/>
+        <input
+          type="text"
+          placeholder="Last Name"
+          required
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        /><br/>
         <input
           type="password"
           placeholder="Password"
