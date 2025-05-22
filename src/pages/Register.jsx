@@ -6,6 +6,8 @@ export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -13,19 +15,45 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/register", {
+      // Step 1: Geocode the address
+      const geoRes = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          address
+        )}`
+      );
+      const geoData = await geoRes.json();
+
+      if (!geoData || geoData.length === 0) {
+        setError("Could not geocode the address. Please check it.");
+        return;
+      }
+
+      const latitude = geoData[0].lat;
+      const longitude = geoData[0].lon;
+
+      // Step 2: Send all form data to backend
+      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/register",{
       // const res = await fetch("http://localhost:4000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, firstName, lastName, password }),
-      });
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            firstName,
+            lastName,
+            password,
+            phone,
+            address,
+            latitude,
+            longitude,
+          }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.error || "Registration failed");
       } else {
-        // Redirect to login page on success
         navigate("/login");
       }
     } catch (err) {
@@ -43,28 +71,48 @@ export default function Register() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        /><br />
+        />
+        <br />
         <input
           type="text"
           placeholder="First Name"
           required
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-        /><br/>
+        />
+        <br />
         <input
           type="text"
           placeholder="Last Name"
           required
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-        /><br/>
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Phone Number"
+          required
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Address"
+          required
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+        <br />
         <input
           type="password"
           placeholder="Password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        /><br />
+        />
+        <br />
         <button type="submit">Register</button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
