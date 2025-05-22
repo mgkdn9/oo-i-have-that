@@ -1,28 +1,26 @@
 import "./css/App.css";
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom"; 
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import RequestTool from "./pages/RequestTool";
 
 function App() {
   const [user, setUser] = useState(null);
 
   return (
-    <HashRouter> 
+    <HashRouter>
       <Routes>
-        <Route 
+        <Route
           path="/"
-          element={user ? <Home user={user}/> : <Navigate to="/login" replace />}
+          element={
+            user ? <Home user={user} /> : <Navigate to="/login" replace />
+          }
         />
-        <Route
-          path="/login"
-          element={<Login onLogin={setUser} />}
-        />
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/login" element={<Login onLogin={setUser} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/request-tool" element={<RequestTool user={user} />} />
       </Routes>
     </HashRouter>
   );

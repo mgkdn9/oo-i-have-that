@@ -23,7 +23,7 @@ export default function Login({ onLogin }) {
       if (!res.ok) {
         setError(data.error || "Login failed");
       } else {
-        onLogin({ email: data.email, firstName: data.firstName, lastName: data.lastName }); 
+        onLogin({ _id: data._id, email: data.email, firstName: data.firstName, lastName: data.lastName }); 
         navigate("/"); // Redirect to homepage or dashboard
       }
     } catch (err) {
