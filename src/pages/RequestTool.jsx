@@ -14,7 +14,7 @@ export default function RequestTool({ user }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/login", {
+      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/createToolRequest", {
       // const res = await fetch("http://localhost:4000/api/createToolRequest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
