@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function Home({ user }) {
+export default function Home({ user, setUser }) {
   const navigate = useNavigate();
   const [toolRequests, setToolRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,12 +24,18 @@ export default function Home({ user }) {
     fetchToolRequests();
   }, [user._id]);
 
+  const handleLogout = () => {
+    setUser(null);
+    navigate("/login");
+  };
+
   return (
     <>
       <button id="rent-tool-btn" onClick={() => navigate("/request-tool")}>
         Rent a Tool
       </button>
       <h2>Logged in as {user.firstName} {user.lastName}</h2>
+      <button onClick={handleLogout}>Logout</button>
       <h1>Tool Requests in your area:</h1>
       {loading ? (
         <p>Loading...</p>

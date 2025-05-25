@@ -15,7 +15,7 @@ function App() {
         <Route
           path="/"
           element={
-            user ? <Home user={user} /> : <Navigate to="/login" replace />
+            user ? <Home user={user} setUser={setUser} /> : <Navigate to="/login" replace />
           }
         />
         <Route path="/login" element={<Login onLogin={setUser} />} />
