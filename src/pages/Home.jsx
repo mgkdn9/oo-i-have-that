@@ -9,11 +9,11 @@ export default function Home({ user }) {
   useEffect(() => {
     const fetchToolRequests = async () => {
       try {
-        // const res = await fetch("http://localhost:4000/api/toolRequests");
-        const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/toolRequests");
+        // const res = await fetch(`http://localhost:4000/api/sortedToolRequests?userId=${user._id}`);
+        const res = await fetch(`https://oo-i-have-that-backend.onrender.com/api/sortedToolRequests?userId=${user._id}`);
         const data = await res.json();
-        const filtered = data.filter(request => request.createdBy !== user._id);
-        setToolRequests(filtered);
+
+        setToolRequests(data);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching tool requests:", err);
@@ -35,9 +35,9 @@ export default function Home({ user }) {
         <p>Loading...</p>
       ) : (
         <ul>
-          {toolRequests.map((req) => (
-            <li key={req._id}>
-              <strong>{req.title}</strong> – {req.timeNeeded} – Offer: ${req.firstOfferPrice}
+          {toolRequests.map((tr) => (
+            <li key={tr._id}>
+              <strong>{tr.title}</strong> – {tr.timeNeeded} – Offer: ${tr.firstOfferPrice} - Distance: {tr.distanceMi} miles away
             </li>
           ))}
         </ul>
