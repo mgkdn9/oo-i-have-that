@@ -43,7 +43,10 @@ export default function Home({ user, setUser }) {
         <ul>
           {toolRequests.map((tr) => (
             <li key={tr._id}>
-              <strong>{tr.title}</strong> – {tr.timeNeeded} – Offer: ${tr.firstOfferPrice} - Distance: {tr.distanceMi} miles away
+              <strong>{tr.title}</strong> – {tr.timeNeeded} – Offer: ${tr.firstOfferPrice} - Distance: {tr.distanceMi} miles away {tr.pictureUrl && (
+  <img src={`${tr.pictureUrl}.jpg`} alt="Tool" style={{ maxWidth: "200px", marginTop: "10px" }} />
+)}
+
             </li>
           ))}
         </ul>
