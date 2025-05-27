@@ -21,8 +21,6 @@ export default function RequestTool({ user }) {
         body: JSON.stringify({ title, timeNeeded, firstOfferPrice, pictureUrl, createdBy: user._id }),
       });
 
-      console.log('user._id', user._id)
-
       const data = await res.json();
 
       if (!res.ok) {

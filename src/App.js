@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import RequestTool from "./pages/RequestTool";
+import Profile from "./pages/Profile";
+import Respond from "./pages/Respond";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,6 +23,8 @@ function App() {
         <Route path="/login" element={<Login onLogin={setUser} />} />
         <Route path="/register" element={<Register />} />
         <Route path="/request-tool" element={<RequestTool user={user} />} />
+        <Route path="/profile" element={<Profile user={user} />} />
+        <Route path="/respond" element={<Respond user={user} />} />
       </Routes>
     </HashRouter>
   );

@@ -24,7 +24,7 @@ export default function Login({ onLogin }) {
         setError(data.error || "Login failed");
       } else {
         onLogin({ _id: data._id, email: data.email, firstName: data.firstName, lastName: data.lastName }); 
-        navigate("/"); // Redirect to homepage or dashboard
+        navigate("/"); // Redirect to homepage
       }
     } catch (err) {
       setError("Server error");
