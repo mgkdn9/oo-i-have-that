@@ -5,6 +5,7 @@
   "homepage": "https://mgkdn9.github.io/oo-i-have-that",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
+    "date-fns": "^4.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
@@ -13,8 +14,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "predeploy": "npm run build",    
-    "deploy": "gh-pages -d build" 
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

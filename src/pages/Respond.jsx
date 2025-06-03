@@ -21,19 +21,16 @@ export default function Respond({ user }) {
   const handleRespond = async (e) => {
     e.preventDefault();
 
-    const timeResponded = new Date().toLocaleString();
-
     try {
-      // const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/createResponse", {
-      const res = await fetch("http://localhost:4000/api/createResponse", {
+      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/createResponse", {
+      // const res = await fetch("http://localhost:4000/api/createResponse", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           originalTR: tr._id,
           counterOfferPrice,
           seeker: tr.createdBy._id,
-          owner: user._id,
-          timeResponded
+          owner: user._id
         }),
       });
 
@@ -42,7 +39,7 @@ export default function Respond({ user }) {
       if (!res.ok) {
         setError(data.error || "Error creating tr reponse");
       } else {
-        navigate("/profile"); // Redirect to homepage or dashboard
+        navigate("/profile"); 
       }
     } catch (err) {
       setError("Server error");
