@@ -11,8 +11,8 @@ export default function Login({ onLogin }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/login", {
-      // const res = await fetch("http://localhost:4000/api/login", {
+      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -23,7 +23,12 @@ export default function Login({ onLogin }) {
       if (!res.ok) {
         setError(data.error || "Login failed");
       } else {
-        onLogin({ _id: data._id, email: data.email, firstName: data.firstName, lastName: data.lastName }); 
+        onLogin({
+          _id: data._id,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+        });
         navigate("/"); // Redirect to homepage
       }
     } catch (err) {
@@ -36,7 +41,8 @@ export default function Login({ onLogin }) {
       <h2>Login Page</h2>
       <form onSubmit={handleLogin}>
         <div>
-          <label htmlFor="email">Email:</label><br />
+          <label htmlFor="email">Email:</label>
+          <br />
           <input
             type="email"
             id="email"
@@ -47,7 +53,8 @@ export default function Login({ onLogin }) {
         </div>
 
         <div style={{ marginTop: "0.5rem" }}>
-          <label htmlFor="password">Password:</label><br />
+          <label htmlFor="password">Password:</label>
+          <br />
           <input
             type="password"
             id="password"
