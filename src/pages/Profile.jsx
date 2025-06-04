@@ -31,7 +31,6 @@ export default function Profile({ user }) {
 
     const fetchMyRequests = async () => {
       try {
-        // const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/myRequests?userId=${user._id}");
         const res = await fetch(
           `https://oo-i-have-that-backend.onrender.com/api/myRequests?userId=${user._id}`
           // `http://localhost:4000/api/myRequests?userId=${user._id}`
@@ -185,8 +184,8 @@ export default function Profile({ user }) {
         ) : myRequests.length === 0 ? (
           <p>No requests yet.</p>
         ) : (
-          <ul style={{ listedStyleType: "none", paddingLeft: 0}}>
-            {myRequests.map( tr => (
+          <ul style={{ listedStyleType: "none", paddingLeft: 0 }}>
+            {myRequests.map((tr) => (
               <li
                 key={tr._id}
                 style={{
@@ -194,21 +193,22 @@ export default function Profile({ user }) {
                   borderRadius: "8px",
                   padding: "1rem",
                   marginBottom: "1.5rem",
-                  backgroundColor: "#f9f9f9"
+                  backgroundColor: "#f9f9f9",
                 }}
               >
                 <h1>{tr.title}</h1>
                 <p>
                   <strong>Tool requested:</strong>{" "}
-                  {formatDistanceToNow(
-                    new Date(tr.updatedAt),
-                    { addSuffix: true }
-                  )}
+                  {formatDistanceToNow(new Date(tr.updatedAt), {
+                    addSuffix: true,
+                  })}
                 </p>
                 <p>
                   <strong>Time needed:</strong> {tr.timeNeeded}
                 </p>
-                <p><strong>Offering:</strong> ${tr.firstOfferPrice}</p>
+                <p>
+                  <strong>Offering:</strong> ${tr.firstOfferPrice}
+                </p>
                 {tr.pictureUrl && (
                   <div style={{ marginTop: "10px" }}>
                     <img
@@ -221,6 +221,37 @@ export default function Profile({ user }) {
                       }}
                     />
                   </div>
+                )}
+                <h4>Responses to {tr.title}:</h4>
+                {tr.responses.length === 0 ? (
+                  <p>
+                    <strong>None yet! Check back later.</strong>
+                  </p>
+                ) : (
+                  <ul style={{ listedStyleType: "none", paddingLeft: 0 }}>
+                    {tr.responses.map((response) => (
+                      <li
+                        key={response._id}
+                        style={{
+                          border: "1px solid #ccc",
+                          borderRadius: "8px",
+                          padding: "1rem",
+                          marginBottom: "1.5rem",
+                          backgroundColor: "#f9f9f9",
+                        }}
+                      >
+                        <p>Respondent user: {response.owner.firstName}</p>
+                        <p>
+                          Response created:{" "}
+                          {formatDistanceToNow(new Date(response.updatedAt), {
+                            addSuffix: true,
+                          })}
+                        </p>
+                        <p>Counteroffering: {response.counterOfferPrice}</p>
+                        <p>Phone number: {response.owner.phone}</p>
+                      </li>
+                    ))}
+                  </ul>
                 )}
               </li>
             ))}

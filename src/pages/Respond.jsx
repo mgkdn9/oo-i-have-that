@@ -15,7 +15,7 @@ export default function Respond({ user }) {
       navigate("/");
     } else {
       // Set counterOfferPrice equal to original offer
-      setCounterOfferPrice(tr.firstOfferPrice)
+      setCounterOfferPrice(tr.firstOfferPrice);
     }
   }, [tr, navigate]);
 
@@ -25,24 +25,27 @@ export default function Respond({ user }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/createResponse", {
-      // const res = await fetch("http://localhost:4000/api/createResponse", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          originalTR: tr._id,
-          counterOfferPrice,
-          seeker: tr.createdBy._id,
-          owner: user._id
-        }),
-      });
+      const res = await fetch(
+        "https://oo-i-have-that-backend.onrender.com/api/createResponse",
+        {
+          // const res = await fetch("http://localhost:4000/api/createResponse", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            originalTR: tr._id,
+            counterOfferPrice,
+            seeker: tr.createdBy._id,
+            owner: user._id,
+          }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
         setError(data.error || "Error creating tr reponse");
       } else {
-        navigate("/profile"); 
+        navigate("/profile");
       }
     } catch (err) {
       setError("Server error");
