@@ -7,12 +7,15 @@ export default function Respond({ user }) {
   const { tr } = location.state || {};
 
   const [error, setError] = useState("");
-  const [counterOfferPrice, setCounterOfferPrice] = useState(0);
+  const [counterOfferPrice, setCounterOfferPrice] = useState("");
 
   useEffect(() => {
     if (!tr) {
       // Redirect if no tool request was passed
       navigate("/");
+    } else {
+      // Set counterOfferPrice equal to original offer
+      setCounterOfferPrice(tr.firstOfferPrice)
     }
   }, [tr, navigate]);
 
@@ -59,7 +62,6 @@ export default function Respond({ user }) {
       )}
       <p>Time Needed: {tr.timeNeeded}</p>
       <p>Offer: ${tr.firstOfferPrice}</p>
-      {/* Add form or response options here */}
       <form onSubmit={handleRespond}>
         <div>
           <label htmlFor="counterOfferPrice">Counter Offer:</label>
