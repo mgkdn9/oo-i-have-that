@@ -9,9 +9,10 @@ export default function Home({ user, setUser }) {
   useEffect(() => {
     const fetchToolRequests = async () => {
       try {
-        // const res = await fetch(`http://localhost:4000/api/sortedToolRequests?userId=${user._id}`);
+        const API_URL =
+          process.env.REACT_APP_API_URL || "http://localhost:4000/api";
         const res = await fetch(
-          `https://oo-i-have-that-backend.onrender.com/api/sortedToolRequests?userId=${user._id}`
+          `${API_URL}/sortedToolRequests?userId=${user._id}`
         );
         const data = await res.json();
 

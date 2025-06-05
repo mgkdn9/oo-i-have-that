@@ -32,22 +32,22 @@ export default function Register() {
       const longitude = geoData[0].lon;
 
       // Step 2: Send all form data to backend
-      const res = await fetch("https://oo-i-have-that-backend.onrender.com/api/register",{
-      // const res = await fetch("http://localhost:4000/api/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            address,
-            latitude,
-            longitude,
-          }),
-        }
-      );
+      const API_URL =
+        process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+      const res = await fetch(`${API_URL}/api/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          firstName,
+          lastName,
+          password,
+          phone,
+          address,
+          latitude,
+          longitude,
+        }),
+      });
 
       const data = await res.json();
 

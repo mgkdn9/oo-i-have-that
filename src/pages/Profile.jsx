@@ -13,9 +13,10 @@ export default function Profile({ user }) {
   useEffect(() => {
     const fetchMyResponses = async () => {
       try {
+        const API_URL =
+          process.env.REACT_APP_API_URL || "http://localhost:4000/api";
         const res = await fetch(
-          `https://oo-i-have-that-backend.onrender.com/api/myResponses?userId=${user._id}`
-          // `http://localhost:4000/api/myResponses?userId=${user._id}`
+          `${API_URL}/myResponses?userId=${user._id}`
         );
         const data = await res.json();
 
@@ -31,10 +32,9 @@ export default function Profile({ user }) {
 
     const fetchMyRequests = async () => {
       try {
-        const res = await fetch(
-          `https://oo-i-have-that-backend.onrender.com/api/myRequests?userId=${user._id}`
-          // `http://localhost:4000/api/myRequests?userId=${user._id}`
-        );
+        const API_URL =
+          process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+        const res = await fetch(`${API_URL}/myRequests?userId=${user._id}`);
         const data = await res.json();
 
         setMyRequests(data);
@@ -52,13 +52,11 @@ export default function Profile({ user }) {
     const toastId = toast.loading("Deleting response...");
 
     try {
-      const res = await fetch(
-        `https://oo-i-have-that-backend.onrender.com/api/response/${responseId}`,
-        // `http://localhost:4000/api/response/${responseId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const API_URL =
+        process.env.REACT_APP_API_URL || "http://localhost:4000/api";
+      const res = await fetch(`${API_URL}/response/${responseId}`, {
+        method: "DELETE",
+      });
 
       if (res.ok) {
         setMyResponses((prevResponses) =>
