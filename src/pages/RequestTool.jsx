@@ -1,37 +1,60 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function RequestTool({ user }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const toolRequest = location.state?.tr; // if coming from edit button
+
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
   const [timeNeeded, setTimeNeeded] = useState("");
   const [firstOfferPrice, setFirstOfferPrice] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
 
-  const navigate = useNavigate();
+  // prefill form if editing
+  useEffect(() => {
+    if (toolRequest) {
+      setTitle(toolRequest.title);
+      setTimeNeeded(toolRequest.timeNeeded);
+      setFirstOfferPrice(toolRequest.firstOfferPrice);
+      setPictureUrl(toolRequest.pictureUrl || "");
+    }
+  }, [toolRequest]);
 
-  const handleCreateToolRequest = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/createToolRequest`, {
-        method: "POST",
+      const url = toolRequest
+        ? `${process.env.REACT_APP_API_URL}/toolRequests/${toolRequest._id}` // edit
+        : `${process.env.REACT_APP_API_URL}/createToolRequest`; // new
+
+      const method = toolRequest ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, timeNeeded, firstOfferPrice, pictureUrl, createdBy: user._id }),
+        body: JSON.stringify({
+          title,
+          timeNeeded,
+          firstOfferPrice,
+          pictureUrl,
+          createdBy: user._id,
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Error creating tool request");
+        setError(data.error || "Error submitting tool request");
       } else {
-        navigate("/"); // Redirect to homepage or dashboard
+        navigate("/profile");
       }
     } catch (err) {
       setError("Server error");
     }
   };
-
   return (
     <>
       <h2 style={{ textDecoration: "underline" }}>Rent a Tool</h2>
@@ -39,7 +62,7 @@ export default function RequestTool({ user }) {
         Tell other users what tool you're looking for and see if anyone has one
         for you to rent.
       </h3>
-      <form onSubmit={handleCreateToolRequest}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Title:</label>
           <br />
@@ -88,7 +111,7 @@ export default function RequestTool({ user }) {
         </div>
 
         <button type="submit" style={{ marginTop: "1rem" }}>
-          Submit
+          {toolRequest ? "Save Changes" : "Submit"}
         </button>
       </form>
 

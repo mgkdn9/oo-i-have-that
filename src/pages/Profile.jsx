@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -9,6 +9,8 @@ export default function Profile({ user }) {
   const [myRequests, setMyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMyResponses = async () => {
@@ -30,7 +32,9 @@ export default function Profile({ user }) {
 
     const fetchMyRequests = async () => {
       try {
-        const res = await fetch(`${process.env.REACT_APP_API_URL}/myRequests?userId=${user._id}`);
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/myRequests?userId=${user._id}`
+        );
         const data = await res.json();
 
         setMyRequests(data);
@@ -48,9 +52,12 @@ export default function Profile({ user }) {
     const toastId = toast.loading("Deleting response...");
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/response/${responseId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/response/${responseId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
         setMyResponses((prevResponses) =>
@@ -82,9 +89,12 @@ export default function Profile({ user }) {
     const toastId = toast.loading("Deleting request...");
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/request/${requestId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/request/${requestId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
         setMyRequests((prevRequests) =>
@@ -181,6 +191,12 @@ export default function Profile({ user }) {
                 >
                   Delete Request
                 </button>
+                <button
+                  onClick={() => navigate("/request-tool", { state: { tr } })}
+                >
+                  Edit Request
+                </button>
+
                 <h4>Responses to {tr.title}:</h4>
                 {tr.responses.length === 0 ? (
                   <p>
