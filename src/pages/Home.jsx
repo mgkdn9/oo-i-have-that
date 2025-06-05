@@ -9,10 +9,8 @@ export default function Home({ user, setUser }) {
   useEffect(() => {
     const fetchToolRequests = async () => {
       try {
-        const API_URL =
-          process.env.REACT_APP_API_URL || "http://localhost:4000/api";
         const res = await fetch(
-          `${API_URL}/sortedToolRequests?userId=${user._id}`
+          `${process.env.REACT_APP_API_URL}/sortedToolRequests?userId=${user._id}`
         );
         const data = await res.json();
 

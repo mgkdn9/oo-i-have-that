@@ -14,9 +14,7 @@ export default function RequestTool({ user }) {
     e.preventDefault();
 
     try {
-      const API_URL =
-        process.env.REACT_APP_API_URL || "http://localhost:4000/api";
-      const res = await fetch(`${API_URL}/createToolRequest`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/createToolRequest`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, timeNeeded, firstOfferPrice, pictureUrl, createdBy: user._id }),
