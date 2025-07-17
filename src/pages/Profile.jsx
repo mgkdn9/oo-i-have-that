@@ -16,15 +16,15 @@ export default function Profile({ user }) {
     const fetchMyResponses = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/myRequests?userId=${user._id}`
+          `${process.env.REACT_APP_API_URL}/myResponses?userId=${user._id}`
         );
         const data = await res.json();
 
         if (res.ok && Array.isArray(data)) {
-          setMyRequests(data);
+          setMyResponses(data);
         } else {
-          console.error("Invalid myRequests response:", data);
-          setMyRequests([]); // fallback to empty
+          console.error("Invalid myResponses response:", data);
+          setMyResponses([]); // fallback to empty
         }
       } catch (err) {
         console.error("Error fetching my responses:", err);
@@ -42,7 +42,12 @@ export default function Profile({ user }) {
         );
         const data = await res.json();
 
-        setMyRequests(data);
+        if (res.ok && Array.isArray(data)) {
+          setMyRequests(data);
+        } else {
+          console.error("Invalid myRequests response:", data);
+          setMyRequests([]); // fallback to empty
+        }
       } catch (err) {
         console.error("Error fetching my responses:", err);
       } finally {
@@ -152,9 +157,11 @@ export default function Profile({ user }) {
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <div style={{ marginBottom: "1rem" }}>
-        <Link to="/" style={{ textDecoration: "none", color: "#007bff" }}>
-          ← Home
-        </Link>
+        <button>
+          <Link to="/" style={{ textDecoration: "none", color: "#007bff" }}>
+            ← Home
+          </Link>
+        </button>
       </div>
 
       <h1>{user.firstName}'s Profile</h1>
@@ -284,61 +291,87 @@ export default function Profile({ user }) {
                   backgroundColor: "#f9f9f9",
                 }}
               >
-                <h1>{response.originalTR.title}</h1>
-                <p>
-                  <strong>Requested by:</strong>{" "}
-                  {response.originalTR.createdBy.firstName}
-                </p>
-                <p>
-                  <strong>Tool requested:</strong>{" "}
-                  {safeFormattedDate(new Date(response.originalTR.updatedAt), {
-                    addSuffix: true,
-                  })}
-                </p>
-                <p>
-                  <strong>Responded:</strong>{" "}
-                  {safeFormattedDate(new Date(response.updatedAt), {
-                    addSuffix: true,
-                  })}
-                </p>
-                <p>
-                  <strong>Time needed:</strong> {response.originalTR.timeNeeded}
-                </p>
-                <p>
-                  <strong>First offer price:</strong> $
-                  {response.originalTR.firstOfferPrice}
-                </p>
-                <p>
-                  <strong>Your counteroffer:</strong> $
-                  {response.counterOfferPrice}
-                </p>
-                {response.originalTR.pictureUrl && (
-                  <div style={{ marginTop: "10px" }}>
-                    <img
-                      src={`${response.originalTR.pictureUrl}.jpg`}
-                      alt="Tool"
+                {response.originalTR === null ? (
+                  <div style={{display: "flex", alignItems: "center", gap: "1rem", justifyContent: "space-between"}}>
+                    <p>This Tool Request was deleted</p>
+                    <button
+                      onClick={() => handleDeleteResponse(response._id)}
                       style={{
-                        maxWidth: "200px",
+                        marginTop: "1rem",
+                        backgroundColor: "#dc3545",
+                        color: "#fff",
+                        border: "none",
+                        padding: "0.5rem 1rem",
                         borderRadius: "4px",
-                        border: "1px solid #ccc",
+                        cursor: "pointer",
                       }}
-                    />
+                    >
+                      Delete Response
+                    </button>
                   </div>
+                ) : (
+                  <>
+                    <h1>{response.originalTR.title}</h1>
+                    <p>
+                      <strong>Requested by:</strong>{" "}
+                      {response.originalTR.createdBy.firstName}
+                    </p>
+                    <p>
+                      <strong>Tool requested:</strong>{" "}
+                      {safeFormattedDate(
+                        new Date(response.originalTR.updatedAt),
+                        {
+                          addSuffix: true,
+                        }
+                      )}
+                    </p>
+                    <p>
+                      <strong>Responded:</strong>{" "}
+                      {safeFormattedDate(new Date(response.updatedAt), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                    <p>
+                      <strong>Time needed:</strong>{" "}
+                      {response.originalTR.timeNeeded}
+                    </p>
+                    <p>
+                      <strong>First offer price:</strong> $
+                      {response.originalTR.firstOfferPrice}
+                    </p>
+                    <p>
+                      <strong>Your counteroffer:</strong> $
+                      {response.counterOfferPrice}
+                    </p>
+                    {response.originalTR.pictureUrl && (
+                      <div style={{ marginTop: "10px" }}>
+                        <img
+                          src={`${response.originalTR.pictureUrl}.jpg`}
+                          alt="Tool"
+                          style={{
+                            maxWidth: "200px",
+                            borderRadius: "4px",
+                            border: "1px solid #ccc",
+                          }}
+                        />
+                      </div>
+                    )}
+                    <button
+                      onClick={() => handleDeleteResponse(response._id)}
+                      style={{
+                        marginTop: "1rem",
+                        backgroundColor: "#dc3545",
+                        color: "#fff",
+                        border: "none",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete Response
+                    </button>
+                  </>
                 )}
-                <button
-                  onClick={() => handleDeleteResponse(response._id)}
-                  style={{
-                    marginTop: "1rem",
-                    backgroundColor: "#dc3545",
-                    color: "#fff",
-                    border: "none",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Delete Response
-                </button>
               </li>
             ))}
           </ul>

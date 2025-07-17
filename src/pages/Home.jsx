@@ -38,12 +38,9 @@ export default function Home({ user, setUser }) {
       <h2>
         Logged in as {user.firstName} {user.lastName}
       </h2>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout} style={{ textDecoration: "none", color: "#007bff" }}>Logout</button>
       <button>
-        <Link
-          to="/profile"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
+        <Link to="/profile" style={{ textDecoration: "none", color: "#007bff" }}>
           Profile
         </Link>
       </button>

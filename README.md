@@ -1,3 +1,7 @@
+run locally with 'npm start'
+update gh pages live branch with 'npm run deploy'
+(committing/pushing on backend will automatically update live version on Render)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
