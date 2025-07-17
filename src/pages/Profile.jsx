@@ -16,11 +16,16 @@ export default function Profile({ user }) {
     const fetchMyResponses = async () => {
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/myResponses?userId=${user._id}`
+          `${process.env.REACT_APP_API_URL}/myRequests?userId=${user._id}`
         );
         const data = await res.json();
 
-        setMyResponses(data);
+        if (res.ok && Array.isArray(data)) {
+          setMyRequests(data);
+        } else {
+          console.error("Invalid myRequests response:", data);
+          setMyRequests([]); // fallback to empty
+        }
       } catch (err) {
         console.error("Error fetching my responses:", err);
       } finally {
@@ -122,6 +127,28 @@ export default function Profile({ user }) {
     }
   };
 
+  function formatPhoneNumber(phone) {
+    // Remove all non-digit characters
+    const cleaned = ("" + phone).replace(/\D/g, "");
+
+    // Check if the input is 10 digits
+    if (cleaned.length !== 10) return phone;
+
+    const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+
+    return phone;
+  }
+
+  const safeFormattedDate = (dateString) => {
+    const date = new Date(dateString);
+    return isNaN(date.getTime())
+      ? "Unknown time"
+      : formatDistanceToNow(date, { addSuffix: true });
+  };
+
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <div style={{ marginBottom: "1rem" }}>
@@ -154,7 +181,7 @@ export default function Profile({ user }) {
                 <h1>{tr.title}</h1>
                 <p>
                   <strong>Tool requested:</strong>{" "}
-                  {formatDistanceToNow(new Date(tr.updatedAt), {
+                  {safeFormattedDate(new Date(tr.updatedAt), {
                     addSuffix: true,
                   })}
                 </p>
@@ -218,12 +245,16 @@ export default function Profile({ user }) {
                         <p>Respondent user: {response.owner.firstName}</p>
                         <p>
                           Response created:{" "}
-                          {formatDistanceToNow(new Date(response.updatedAt), {
+                          {safeFormattedDate(new Date(response.updatedAt), {
                             addSuffix: true,
                           })}
                         </p>
-                        <p>Counteroffering: {response.counterOfferPrice}</p>
-                        <p>Phone number: {response.owner.phone}</p>
+                        <p>Counteroffering: ${response.counterOfferPrice}</p>
+                        <p>Distance: {response.distance} miles</p>
+                        <p>
+                          Phone number:{" "}
+                          {formatPhoneNumber(response.owner.phone)}
+                        </p>
                       </li>
                     ))}
                   </ul>
@@ -260,14 +291,13 @@ export default function Profile({ user }) {
                 </p>
                 <p>
                   <strong>Tool requested:</strong>{" "}
-                  {formatDistanceToNow(
-                    new Date(response.originalTR.updatedAt),
-                    { addSuffix: true }
-                  )}
+                  {safeFormattedDate(new Date(response.originalTR.updatedAt), {
+                    addSuffix: true,
+                  })}
                 </p>
                 <p>
                   <strong>Responded:</strong>{" "}
-                  {formatDistanceToNow(new Date(response.updatedAt), {
+                  {safeFormattedDate(new Date(response.updatedAt), {
                     addSuffix: true,
                   })}
                 </p>
