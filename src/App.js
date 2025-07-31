@@ -9,16 +9,11 @@ import Profile from "./pages/Profile";
 import Respond from "./pages/Respond";
 
 function App() {
-  // Get from localStorage if available
+  // Get from sessionStorage if available
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("user");
+    const saved = sessionStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
   });
-
-  const clearUser = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
 
   return (
     <HashRouter>

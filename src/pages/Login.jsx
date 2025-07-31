@@ -29,7 +29,7 @@ export default function Login({ onLogin }) {
           lastName: data.lastName,
         }
         onLogin(newUser);
-        localStorage.setItem('user', JSON.stringify(newUser));
+        sessionStorage.setItem('user', JSON.stringify(newUser));
         navigate("/"); // Redirect to homepage
       }
     } catch (err) {

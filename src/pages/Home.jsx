@@ -28,6 +28,7 @@ export default function Home({ user, setUser }) {
   const handleLogout = () => {
     setUser(null);
     navigate("/login");
+    sessionStorage.removeItem("user");
   };
 
   return (
