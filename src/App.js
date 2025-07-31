@@ -9,7 +9,16 @@ import Profile from "./pages/Profile";
 import Respond from "./pages/Respond";
 
 function App() {
-  const [user, setUser] = useState(null);
+  // Get from localStorage if available
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const clearUser = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+  };
 
   return (
     <HashRouter>
@@ -17,7 +26,11 @@ function App() {
         <Route
           path="/"
           element={
-            user ? <Home user={user} setUser={setUser} /> : <Navigate to="/login" replace />
+            user ? (
+              <Home user={user} setUser={setUser} />
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         <Route path="/login" element={<Login onLogin={setUser} />} />

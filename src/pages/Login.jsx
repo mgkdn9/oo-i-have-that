@@ -22,12 +22,14 @@ export default function Login({ onLogin }) {
       if (!res.ok) {
         setError(data.error || "Login failed");
       } else {
-        onLogin({
+        const newUser = {
           _id: data._id,
           email: data.email,
           firstName: data.firstName,
           lastName: data.lastName,
-        });
+        }
+        onLogin(newUser);
+        localStorage.setItem('user', JSON.stringify(newUser));
         navigate("/"); // Redirect to homepage
       }
     } catch (err) {
