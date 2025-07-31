@@ -56,8 +56,6 @@ export default function Profile({ user }) {
     };
 
     fetchMyRequests();
-
-    console.log('user', user)
   }, [user._id, location.key]);
 
   const handleDeleteResponse = async (responseId) => {
