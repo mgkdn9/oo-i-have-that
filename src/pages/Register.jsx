@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -9,13 +10,15 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      // Step 1: Geocode the address
       const geoRes = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           address
@@ -25,13 +28,13 @@ export default function Register() {
 
       if (!geoData || geoData.length === 0) {
         setError("Could not geocode the address. Please check it.");
+        setLoading(false);
         return;
       }
 
       const latitude = geoData[0].lat;
       const longitude = geoData[0].lon;
 
-      // Step 2: Send all form data to backend
       const res = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,8 +57,10 @@ export default function Register() {
       } else {
         navigate("/login");
       }
-    } catch (err) {
+    } catch {
       setError("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,9 +116,15 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <br />
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          Register
+        </button>
       </form>
+
+      <LoadingOverlay visible={loading} />
+
       {error && <p style={{ color: "red" }}>{error}</p>}
+
       <p>
         Already have an account? <Link to="/login">Login here</Link>.
       </p>

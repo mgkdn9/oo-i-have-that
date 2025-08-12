@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -81,44 +82,8 @@ export default function Login({ onLogin }) {
         Don't have an account? <Link to="/register">Register here</Link>.
       </p>
 
-      {/* Fullscreen loading overlay */}
-      {loading && (
-        <div style={overlayStyle}>
-          <div style={spinnerStyle}></div>
-        </div>
-      )}
+      <LoadingOverlay visible={loading} />
 
-      <style>
-        {`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}
-      </style>
     </div>
   );
 }
-
-// Styles for overlay and spinner
-const overlayStyle = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
-  backgroundColor: "rgba(0, 0, 0, 0.4)",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  zIndex: 9999,
-};
-
-const spinnerStyle = {
-  width: "48px",
-  height: "48px",
-  border: "5px solid #ccc",
-  borderTop: "5px solid white",
-  borderRadius: "50%",
-  animation: "spin 1s linear infinite",
-};
