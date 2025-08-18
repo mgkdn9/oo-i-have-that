@@ -4,13 +4,19 @@ import { formatDistanceToNow } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function Profile({ user }) {
+export default function Profile({ user, setUser }) {
   const [myResponses, setMyResponses] = useState([]);
   const [myRequests, setMyRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUser(null);
+    sessionStorage.removeItem("user");
+    navigate("/login");
+  };
 
   useEffect(() => {
     const fetchMyResponses = async () => {
@@ -156,11 +162,22 @@ export default function Profile({ user }) {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
-      <div style={{ marginBottom: "1rem" }}>
+      <div style={{ marginBottom: "1rem", display: "flex", width: "100%" }}>
         <button>
-          <Link to="/" style={{ textDecoration: "none", color: "#007bff" }}>
+          <Link to="/" style={{ textDecoration: "none", color: "#007bff",
+            marginLeft: "auto", }}>
             ← Home
           </Link>
+        </button>
+        <button
+          onClick={handleLogout}
+          style={{
+            textDecoration: "none",
+            color: "#007bff",
+            marginLeft: "auto",
+          }}
+        >
+          Logout
         </button>
       </div>
 
@@ -173,7 +190,7 @@ export default function Profile({ user }) {
         ) : myRequests.length === 0 ? (
           <p>No requests yet.</p>
         ) : (
-          <ul style={{ listedStyleType: "none", paddingLeft: 0 }}>
+          <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
             {myRequests.map((tr) => (
               <li
                 key={tr._id}
@@ -237,7 +254,7 @@ export default function Profile({ user }) {
                     <strong>None yet! Check back later.</strong>
                   </p>
                 ) : (
-                  <ul style={{ listedStyleType: "none", paddingLeft: 0 }}>
+                  <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
                     {tr.responses.map((response) => (
                       <li
                         key={response._id}

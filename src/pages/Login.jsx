@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
 
-export default function Login({ onLogin }) {
+export default function Login({ setUser }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,7 +32,7 @@ export default function Login({ onLogin }) {
           firstName: data.firstName,
           lastName: data.lastName,
         };
-        onLogin(newUser);
+        setUser(newUser);
         sessionStorage.setItem("user", JSON.stringify(newUser));
         navigate("/");
       }

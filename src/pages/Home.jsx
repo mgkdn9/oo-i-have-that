@@ -39,20 +39,26 @@ export default function Home({ user, setUser }) {
       <h2>
         Logged in as {user.firstName} {user.lastName}
       </h2>
-      <button
-        onClick={handleLogout}
-        style={{ textDecoration: "none", color: "#007bff" }}
-      >
-        Logout
-      </button>
-      <button>
-        <Link
-          to="/profile"
-          style={{ textDecoration: "none", color: "#007bff" }}
+      <div style={{ display: "flex", width: "100%" }}>
+        <button>
+          <Link
+            to="/profile"
+            style={{ textDecoration: "none", color: "#007bff" }}
+          >
+            Profile
+          </Link>
+        </button>
+        <button
+          onClick={handleLogout}
+          style={{
+            textDecoration: "none",
+            color: "#007bff",
+            marginLeft: "auto",
+          }}
         >
-          Profile
-        </Link>
-      </button>
+          Logout
+        </button>
+      </div>
       <h1>Tool Requests in your area:</h1>
       {loading ? (
         <p>Loading...</p>

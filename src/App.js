@@ -1,5 +1,5 @@
 import "./css/App.css";
-import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -9,32 +9,56 @@ import Profile from "./pages/Profile";
 import Respond from "./pages/Respond";
 
 function App() {
-  // Get from sessionStorage if available
+  // Load from sessionStorage if available
   const [user, setUser] = useState(() => {
     const saved = sessionStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
   });
 
   return (
-    <HashRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            user ? (
-              <Home user={user} setUser={setUser} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-        <Route path="/login" element={<Login onLogin={setUser} />} />
-        <Route path="/register" element={<Register setUser={setUser} />} />
-        <Route path="/request-tool" element={<RequestTool user={user} />} />
-        <Route path="/profile" element={<Profile user={user} />} />
-        <Route path="/respond" element={<Respond user={user} />} />
-      </Routes>
-    </HashRouter>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user ? (
+            <Home user={user} setUser={setUser} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      <Route path="/login" element={<Login setUser={setUser} />} />
+      <Route path="/register" element={<Register setUser={setUser} />} />
+
+      <Route
+        path="/request-tool"
+        element={
+          user ? <RequestTool user={user} /> : <Navigate to="/login" replace />
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          user ? (
+            <Profile user={user} setUser={setUser} />
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+      <Route
+        path="/respond"
+        element={
+          user ? <Respond user={user} /> : <Navigate to="/login" replace />
+        }
+      />
+
+      <Route
+        path="*"
+        element={<Navigate to={user ? "/" : "/login"} replace />}
+      />
+    </Routes>
   );
 }
 
