@@ -29,7 +29,7 @@ function App() {
           }
         />
         <Route path="/login" element={<Login onLogin={setUser} />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setUser={setUser} />} />
         <Route path="/request-tool" element={<RequestTool user={user} />} />
         <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/respond" element={<Respond user={user} />} />

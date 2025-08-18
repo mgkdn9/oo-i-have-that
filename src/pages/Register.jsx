@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
 
-export default function Register() {
+export default function Register({ setUser }) {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -55,7 +55,9 @@ export default function Register() {
       if (!res.ok) {
         setError(data.error || "Registration failed");
       } else {
-        navigate("/login");
+        setUser(data.user)
+        sessionStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/");
       }
     } catch {
       setError("Server error");
