@@ -30,7 +30,7 @@ export default function Login({ onLogin }) {
           _id: data._id,
           email: data.email,
           firstName: data.firstName,
-          lastName: data.lastName
+          lastName: data.lastName,
         };
         onLogin(newUser);
         sessionStorage.setItem("user", JSON.stringify(newUser));
@@ -82,8 +82,10 @@ export default function Login({ onLogin }) {
         Don't have an account? <Link to="/register">Register here</Link>.
       </p>
 
-      <LoadingOverlay visible={loading} />
-
+      <LoadingOverlay
+        visible={loading}
+        text="Logging you in. This might take a minute..."
+      />
     </div>
   );
 }

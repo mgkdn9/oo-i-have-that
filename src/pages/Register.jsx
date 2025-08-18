@@ -121,7 +121,10 @@ export default function Register() {
         </button>
       </form>
 
-      <LoadingOverlay visible={loading} />
+      <LoadingOverlay
+        visible={loading}
+        text="Signing you up. This might take a minute..."
+      />
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
