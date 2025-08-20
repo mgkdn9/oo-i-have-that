@@ -33,9 +33,6 @@ export default function Home({ user, setUser }) {
 
   return (
     <>
-      <button id="rent-tool-btn" onClick={() => navigate("/request-tool")}>
-        Rent a Tool
-      </button>
       <h2>
         Logged in as {user.firstName} {user.lastName}
       </h2>
