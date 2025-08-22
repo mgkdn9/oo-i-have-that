@@ -1,28 +1,56 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function Home({ user, setUser }) {
+export default function Home({ user }) {
   const navigate = useNavigate();
   const [toolRequests, setToolRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      // If not logged in, skip fetching user-specific tool requests
-      setLoading(false);
-      return;
-    }
     const fetchToolRequests = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/sortedToolRequests?userId=${user._id}`
-        );
-        const data = await res.json();
+      let fetchUrl;
 
-        setToolRequests(data);
+      if (user) {
+        // Logged in: fetch by user ID
+        fetchUrl = `${process.env.REACT_APP_API_URL}/sortedToolRequests?userId=${user._id}`;
+      } else if (navigator.geolocation) {
+        // Not logged in: get local coordinates
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const localLat = position.coords.latitude;
+            const localLon = position.coords.longitude;
+            fetchUrl = `${process.env.REACT_APP_API_URL}/sortedToolRequests?localLat=${localLat}&localLon=${localLon}`;
+
+            try {
+              const res = await fetch(fetchUrl);
+              const data = await res.json();
+              setToolRequests(data);
+            } catch (err) {
+              console.error("Error fetching tool requests:", err);
+            } finally {
+              setLoading(false);
+            }
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+            setLoading(false);
+          }
+        );
+        return; // exit early, because fetch will happen in the geolocation callback
+      } else {
+        console.error("Geolocation not supported");
         setLoading(false);
+        return;
+      }
+
+      // If user is logged in, fetch normally
+      try {
+        const res = await fetch(fetchUrl);
+        const data = await res.json();
+        setToolRequests(data);
       } catch (err) {
         console.error("Error fetching tool requests:", err);
+      } finally {
         setLoading(false);
       }
     };
@@ -31,7 +59,8 @@ export default function Home({ user, setUser }) {
   }, [user]);
 
   return (
-    <>{user && (
+    <>
+      {user && (
         <button id="rent-tool-btn" onClick={() => navigate("/request-tool")}>
           Rent a Tool
         </button>
