@@ -32,34 +32,8 @@ export default function Home({ user, setUser }) {
     console.log('user', user)
   }, [user]);
 
-  const handleLogout = () => {
-    setUser(null);
-    navigate("/login");
-    sessionStorage.removeItem("user");
-  };
-
   return (
     <>
-      <div style={{ display: "flex", width: "100%" }}>
-        <button>
-          <Link
-            to="/profile"
-            style={{ textDecoration: "none", color: "#007bff" }}
-          >
-            Profile
-          </Link>
-        </button>
-        <button
-          onClick={handleLogout}
-          style={{
-            textDecoration: "none",
-            color: "#007bff",
-            marginLeft: "auto",
-          }}
-        >
-          Logout
-        </button>
-      </div>
       <h1>Tool Requests in your area:</h1>
       {loading ? (
         <p>Loading...</p>
