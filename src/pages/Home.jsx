@@ -28,12 +28,14 @@ export default function Home({ user, setUser }) {
     };
 
     fetchToolRequests();
-
-    console.log('user', user)
   }, [user]);
 
   return (
-    <>
+    <>{user && (
+        <button id="rent-tool-btn" onClick={() => navigate("/request-tool")}>
+          Rent a Tool
+        </button>
+      )}
       <h1>Tool Requests in your area:</h1>
       {loading ? (
         <p>Loading...</p>
