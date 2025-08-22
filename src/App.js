@@ -18,18 +18,9 @@ function App() {
 
   return (
     <>
-      <Header user={user} />
+      <Header user={user} setUser={setUser} />
       <Routes>
-        <Route
-          path="/"
-          element={
-            user ? (
-              <Home user={user} setUser={setUser} />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        <Route path="/" element={<Home user={user} setUser={setUser} />} />
 
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register setUser={setUser} />} />
@@ -63,7 +54,7 @@ function App() {
 
         <Route
           path="*"
-          element={<Navigate to={user ? "/" : "/login"} replace />}
+          element={<Navigate to="/" replace />}
         />
       </Routes>
     </>

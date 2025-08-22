@@ -7,6 +7,11 @@ export default function Home({ user, setUser }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) {
+      // If not logged in, skip fetching user-specific tool requests
+      setLoading(false);
+      return;
+    }
     const fetchToolRequests = async () => {
       try {
         const res = await fetch(
@@ -23,7 +28,9 @@ export default function Home({ user, setUser }) {
     };
 
     fetchToolRequests();
-  }, [user._id]);
+
+    console.log('user', user)
+  }, [user]);
 
   const handleLogout = () => {
     setUser(null);
@@ -33,9 +40,6 @@ export default function Home({ user, setUser }) {
 
   return (
     <>
-      <h2>
-        Logged in as {user.firstName} {user.lastName}
-      </h2>
       <div style={{ display: "flex", width: "100%" }}>
         <button>
           <Link
