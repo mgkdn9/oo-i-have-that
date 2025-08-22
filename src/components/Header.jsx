@@ -45,7 +45,7 @@ export default function Header({ user, setUser }) {
         <img
           src={logo}
           alt="OoIHaveThat logo"
-          style={{ maxWidth: "200px", height: "auto" }}
+          style={{ maxWidth: "100px", height: "auto" }}
         />
       </Navbar.Brand>
 

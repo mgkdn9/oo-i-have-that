@@ -65,7 +65,7 @@ export default function Home({ user }) {
           Rent a Tool
         </button>
       )}
-      <h1>Tool Requests in your area:</h1>
+      <h1 style={{marginLeft: "10px"}}>Tool Requests in your area:</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
