@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
+import axios from "axios";
 
 export default function Register({ setUser }) {
   const [email, setEmail] = useState("");
@@ -11,7 +12,11 @@ export default function Register({ setUser }) {
   const [address, setAddress] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
+  const tr = location.state?.tr;
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -19,48 +24,17 @@ export default function Register({ setUser }) {
     setError("");
 
     try {
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          address
-        )}`
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/register`,
+        { email, firstName, lastName, password, phone, address }
       );
-      const geoData = await geoRes.json();
 
-      if (!geoData || geoData.length === 0) {
-        setError("Could not geocode the address. Please check it.");
-        setLoading(false);
-        return;
-      }
-
-      const latitude = geoData[0].lat;
-      const longitude = geoData[0].lon;
-
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          firstName,
-          lastName,
-          password,
-          phone,
-          address,
-          latitude,
-          longitude,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Registration failed");
-      } else {
-        setUser(data.user)
-        sessionStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/");
-      }
-    } catch {
-      setError("Server error");
+      setUser(res.data.user);
+      sessionStorage.setItem("user", JSON.stringify(res.data.user));
+      navigate(from, { state: { tr } });
+    } catch (err) {
+      console.error("Registration error:", err);
+      setError(err.response?.data?.error || "Server error. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
 
 export default function Login({ setUser }) {
@@ -7,7 +7,11 @@ export default function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
+  const tr = location.state?.tr;
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -34,7 +38,7 @@ export default function Login({ setUser }) {
         };
         setUser(newUser);
         sessionStorage.setItem("user", JSON.stringify(newUser));
-        navigate("/");
+        navigate(from, { state: { tr } });
       }
     } catch (err) {
       setError("Server error");
@@ -79,7 +83,14 @@ export default function Login({ setUser }) {
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
 
       <p style={{ marginTop: "1rem" }}>
-        Don't have an account? <Link to="/register">Register here</Link>.
+        Don't have an account?{" "}
+        <Link
+          to="/register"
+          state={{ from, tr }}
+        >
+          Register here
+        </Link>
+        .
       </p>
 
       <LoadingOverlay

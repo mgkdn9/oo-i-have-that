@@ -81,14 +81,17 @@ export default function Home({ user }) {
                   style={{ maxWidth: "200px", marginTop: "10px" }}
                 />
               )}
-              <button>
-                <Link
-                  to="/respond"
-                  state={{ tr }}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Respond
-                </Link>
+              <button
+                onClick={() => {
+                  if (user) {
+                    navigate("/respond", { state: { tr } });
+                  } else {
+                    // send them to login and remember where they wanted to go
+                    navigate("/login", { state: { from: "/respond", tr } });
+                  }
+                }}
+              >
+                Respond
               </button>
             </li>
           ))}
