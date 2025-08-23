@@ -12,11 +12,15 @@ export default function Respond({ user }) {
 
   useEffect(() => {
     if (!tr) {
-      navigate("/");
-    } else {
+      navigate("/"); // no request passed
+      return;
+    }
+    if (user && user._id === tr.createdBy._id) {
+      navigate("/"); // redirect to home if they tried to respond to their own tr
+    } else if (tr && !counterOfferPrice) {
       setCounterOfferPrice(tr.firstOfferPrice);
     }
-  }, [tr, navigate]);
+  }, [tr, user, navigate]);
 
   if (!tr) return <p className="text-center mt-4">Loading...</p>;
 
@@ -52,9 +56,14 @@ export default function Respond({ user }) {
 
   return (
     <div className="d-flex justify-content-center mt-2 px-3">
-      <Card style={{ maxWidth: "600px", width: "100%" }} className="shadow mb-2">
+      <Card
+        style={{ maxWidth: "600px", width: "100%" }}
+        className="shadow mb-2"
+      >
         <Card.Body className="pb-2 mb-2">
-          <Card.Subtitle className="mb-3 text-muted">Respond to Request</Card.Subtitle>
+          <Card.Subtitle className="mb-3 text-muted">
+            Respond to Request
+          </Card.Subtitle>
           <Card.Title className="mb-3 fs-3">{tr.title}</Card.Title>
 
           {tr.pictureUrl && (
@@ -93,7 +102,7 @@ export default function Respond({ user }) {
             </Form.Group>
 
             <div className="d-flex justify-content-end gap-2">
-              <Button variant="secondary" onClick={() => navigate(-1)}>
+              <Button variant="secondary" onClick={() => navigate("/")}>
                 Cancel
               </Button>
               <Button type="submit" variant="primary">
