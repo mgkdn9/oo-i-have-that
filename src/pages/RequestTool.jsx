@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 export default function RequestTool({ user }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const toolRequest = location.state?.tr; // if coming from edit button
+  const toolRequest = location.state?.tr; // if coming from 'Edit Request' button
 
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
@@ -56,7 +56,7 @@ export default function RequestTool({ user }) {
     }
   };
   return (
-    <>
+    <div style={{margin: "10px"}}>
       <h2 style={{ textDecoration: "underline" }}>Rent a Tool</h2>
       <h3>
         Tell other users what tool you're looking for and see if anyone has one
@@ -67,8 +67,9 @@ export default function RequestTool({ user }) {
           <label htmlFor="title">Title:</label>
           <br />
           <input
-            type="title"
+            type="text"
             id="title"
+            className="request-tool-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -79,8 +80,9 @@ export default function RequestTool({ user }) {
           <label htmlFor="timeNeeded">Time Needed:</label>
           <br />
           <input
-            type="timeNeeded"
+            type="text"
             id="timeNeeded"
+            className="request-tool-input"
             value={timeNeeded}
             onChange={(e) => setTimeNeeded(e.target.value)}
             required
@@ -91,8 +93,9 @@ export default function RequestTool({ user }) {
           <label htmlFor="firstOfferPrice">First Offer Price:</label>
           <br />
           <input
-            type="firstOfferPrice"
+            type="text"
             id="firstOfferPrice"
+            className="request-tool-input"
             value={firstOfferPrice}
             onChange={(e) => setFirstOfferPrice(e.target.value)}
             required
@@ -103,8 +106,9 @@ export default function RequestTool({ user }) {
           <label htmlFor="pictureUrl">Picture URL:</label>
           <br />
           <input
-            type="pictureUrl"
+            type="url"
             id="pictureUrl"
+            className="request-tool-input"
             value={pictureUrl}
             onChange={(e) => setPictureUrl(e.target.value)}
           />
@@ -116,6 +120,6 @@ export default function RequestTool({ user }) {
       </form>
 
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
-    </>
+    </div>
   );
 }
