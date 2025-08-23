@@ -6,7 +6,22 @@ export default function Home({ user }) {
   const navigate = useNavigate();
   const [toolRequests, setToolRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [numCols, setNumCols] = useState(1);
 
+  // Update column count based on window size
+  useEffect(() => {
+    const updateCols = () => {
+      if (window.innerWidth > 1200) setNumCols(3);
+      else if (window.innerWidth > 768) setNumCols(2);
+      else setNumCols(1);
+    };
+
+    updateCols();
+    window.addEventListener("resize", updateCols);
+    return () => window.removeEventListener("resize", updateCols);
+  }, []);
+
+  // Fetch tool requests
   useEffect(() => {
     const fetchToolRequests = async () => {
       let fetchUrl;
@@ -56,8 +71,19 @@ export default function Home({ user }) {
     fetchToolRequests();
   }, [user]);
 
+  // Split toolRequests into columns
+  const getColumns = (items, numCols) => {
+    const cols = Array.from({ length: numCols }, () => []);
+    items.forEach((item, i) => {
+      cols[i % numCols].push(item);
+    });
+    return cols;
+  };
+
+  const columns = getColumns(toolRequests, numCols);
+
   return (
-    <div style={{ padding: "10px" }}>
+    <div style={{ padding: "10px"}}>
       {user && (
         <button
           id="rent-tool-btn"
@@ -73,16 +99,21 @@ export default function Home({ user }) {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-            gap: "16px",
-            marginTop: "20px",
-          }}
-        >
-          {toolRequests.map((tr) => (
-            <TRCard key={tr._id} tr={tr} user={user} />
+        <div style={{ display: "flex", gap: "16px" }}>
+          {columns.map((col, colIndex) => (
+            <div
+              key={colIndex}
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+              }}
+            >
+              {col.map((tr) => (
+                <TRCard key={tr._id} tr={tr} user={user} />
+              ))}
+            </div>
           ))}
         </div>
       )}

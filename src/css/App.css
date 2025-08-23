@@ -1,3 +1,6 @@
+body {
+  background-color: lightgrey;
+}
 .request-tool-input {
   text-align: center;
 }
