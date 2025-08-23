@@ -83,18 +83,43 @@ export default function Home({ user }) {
   const columns = getColumns(toolRequests, numCols);
 
   return (
-    <div style={{ padding: "10px"}}>
-      {user && (
-        <button
-          id="rent-tool-btn"
-          onClick={() => navigate("/request-tool")}
-          style={{ marginBottom: "20px" }}
-        >
-          Rent a Tool
-        </button>
-      )}
+    <div style={{ padding: "10px" }}>
+      <button
+        id="rent-tool-btn"
+        onClick={() => {
+          if (user) {
+            navigate("/request-tool");
+          } else {
+            navigate("/login", { state: { from: "/request-tool" } });
+          }
+        }}
+        style={{
+          marginBottom: "10px",
+          margin: "0 auto",
+          padding: "12px 24px",
+          fontSize: "1.5rem",
+          fontWeight: "600",
+          backgroundColor: "#0d6efd", // Bootstrap primary blue
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+          boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+          transition: "transform 0.1s ease, box-shadow 0.1s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.25)";
+          e.currentTarget.style.boxShadow = "0 6px 10px rgba(0,0,0,0.15)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+        }}
+      >
+        Request a Tool
+      </button>
 
-      <h1>Tool Requests in your area:</h1>
+      <h3 style={{margin: "0 auto", textDecoration: "underline"}}>Tool Requests in your area</h3>
 
       {loading ? (
         <p>Loading...</p>

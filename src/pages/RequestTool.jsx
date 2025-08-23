@@ -57,7 +57,7 @@ export default function RequestTool({ user }) {
   };
   return (
     <div style={{margin: "10px"}}>
-      <h2 style={{ textDecoration: "underline" }}>Rent a Tool</h2>
+      <h2 style={{ textDecoration: "underline" }}>Request a Tool</h2>
       <h3>
         Tell other users what tool you're looking for and see if anyone has one
         for you to rent.
