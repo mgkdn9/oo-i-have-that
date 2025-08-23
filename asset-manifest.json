@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/oo-i-have-that/static/css/main.4232e740.css",
-    "main.js": "/oo-i-have-that/static/js/main.db52e251.js",
+    "main.js": "/oo-i-have-that/static/js/main.6377cab0.js",
     "static/media/logoOoIHaveThat.png": "/oo-i-have-that/static/media/logoOoIHaveThat.622c5ef995c825a5cc0b.png",
     "index.html": "/oo-i-have-that/index.html",
     "main.4232e740.css.map": "/oo-i-have-that/static/css/main.4232e740.css.map",
-    "main.db52e251.js.map": "/oo-i-have-that/static/js/main.db52e251.js.map"
+    "main.6377cab0.js.map": "/oo-i-have-that/static/js/main.6377cab0.js.map"
   },
   "entrypoints": [
     "static/css/main.4232e740.css",
-    "static/js/main.db52e251.js"
+    "static/js/main.6377cab0.js"
   ]
 }
