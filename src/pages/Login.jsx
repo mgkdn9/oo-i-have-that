@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoadingOverlay from "../components/LoadingOverlay";
+import {Button} from "react-bootstrap"
 
 export default function Login({ setUser }) {
   const [email, setEmail] = useState("");
@@ -75,9 +76,9 @@ export default function Login({ setUser }) {
           />
         </div>
 
-        <button type="submit" style={{ marginTop: "1rem" }} disabled={loading}>
+        <Button variant="primary" type="submit" style={{ marginTop: "1rem" }} disabled={loading}>
           Log In
-        </button>
+        </Button>
       </form>
 
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
