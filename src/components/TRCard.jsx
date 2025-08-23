@@ -20,7 +20,7 @@ export default function TRCard({ tr, user }) {
       <div>
         <h3 style={{ margin: "0 0 8px 0" }}>{tr.title}</h3>
         <p style={{ margin: "4px 0" }}>Time Needed: {tr.timeNeeded}</p>
-        <p style={{ margin: "4px 0" }}>Offer: ${tr.firstOfferPrice}</p>
+        <p style={{ margin: "4px 0" }}>Offering: ${tr.firstOfferPrice}</p>
         <p style={{ margin: "4px 0" }}>Distance: {tr.distanceMi} miles</p>
         {tr.pictureUrl && (
           <img
