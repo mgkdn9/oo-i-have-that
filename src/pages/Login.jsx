@@ -48,7 +48,7 @@ export default function Login({ setUser }) {
   };
 
   return (
-    <div>
+    <div style={{padding: "10px"}}>
       <h2>Login Page</h2>
       <form onSubmit={handleLogin}>
         <div>

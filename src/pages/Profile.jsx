@@ -30,7 +30,7 @@ export default function Profile({ user, setUser }) {
           setMyResponses(data);
         } else {
           console.error("Invalid myResponses response:", data);
-          setMyResponses([]); // fallback to empty
+          setMyResponses([]); 
         }
       } catch (err) {
         console.error("Error fetching my responses:", err);
