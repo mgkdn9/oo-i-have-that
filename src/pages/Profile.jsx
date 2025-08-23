@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "react-bootstrap";
 
 export default function Profile({ user, setUser }) {
   const [myResponses, setMyResponses] = useState([]);
@@ -11,12 +12,6 @@ export default function Profile({ user, setUser }) {
   const location = useLocation();
 
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    setUser(null);
-    sessionStorage.removeItem("user");
-    navigate("/login");
-  };
 
   useEffect(() => {
     const fetchMyResponses = async () => {
@@ -30,7 +25,7 @@ export default function Profile({ user, setUser }) {
           setMyResponses(data);
         } else {
           console.error("Invalid myResponses response:", data);
-          setMyResponses([]); 
+          setMyResponses([]);
         }
       } catch (err) {
         console.error("Error fetching my responses:", err);
@@ -164,27 +159,21 @@ export default function Profile({ user, setUser }) {
     <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
       <div style={{ marginBottom: "1rem", display: "flex", width: "100%" }}>
         <button>
-          <Link to="/" style={{ textDecoration: "none", color: "#007bff",
-            marginLeft: "auto", }}>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              color: "#007bff",
+              marginLeft: "auto",
+            }}
+          >
             ← Home
           </Link>
         </button>
-        <button
-          onClick={handleLogout}
-          style={{
-            textDecoration: "none",
-            color: "#007bff",
-            marginLeft: "auto",
-          }}
-        >
-          Logout
-        </button>
       </div>
 
-      <h1>{user.firstName}'s Profile</h1>
-
       <section>
-        <h2>{user.firstName}'s Tool Requests</h2>
+        <h2 style={{textDecoration: "underline"}}>{user.firstName}'s Tool Requests</h2>
         {loading ? (
           <p>Loading tool requests...</p>
         ) : myRequests.length === 0 ? (
@@ -202,21 +191,21 @@ export default function Profile({ user, setUser }) {
                   backgroundColor: "#f9f9f9",
                 }}
               >
-                <h1>{tr.title}</h1>
-                <p>
+                <h3>{tr.title}</h3>
+                <p className="mb-2">
                   <strong>Tool requested:</strong>{" "}
                   {safeFormattedDate(new Date(tr.updatedAt), {
                     addSuffix: true,
                   })}
                 </p>
-                <p>
+                <p className="mb-2">
                   <strong>Time needed:</strong> {tr.timeNeeded}
                 </p>
-                <p>
+                <p className="mb-2">
                   <strong>Offering:</strong> ${tr.firstOfferPrice}
                 </p>
                 {tr.pictureUrl && (
-                  <div style={{ marginTop: "10px" }}>
+                  <div style={{ margin: "10px auto" }}>
                     <img
                       src={`${tr.pictureUrl}.jpg`}
                       alt="Tool"
@@ -228,27 +217,22 @@ export default function Profile({ user, setUser }) {
                     />
                   </div>
                 )}
-                <button
-                  onClick={() => handleDeleteRequest(tr._id)}
-                  style={{
-                    marginTop: "1rem",
-                    backgroundColor: "#dc3545",
-                    color: "#fff",
-                    border: "none",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Delete Request
-                </button>
-                <button
-                  onClick={() => navigate("/request-tool", { state: { tr } })}
-                >
-                  Edit Request
-                </button>
-
-                <h4>Responses to {tr.title}:</h4>
+                <div style={{ display: "flex", gap: "5px" }}>
+                  <Button
+                    onClick={() => handleDeleteRequest(tr._id)}
+                    variant="danger"
+                  >
+                    Delete Request
+                  </Button>
+                  <Button
+                    onClick={() => navigate("/request-tool", { state: { tr } })}
+                    variant="secondary"
+                  >
+                    Edit Request
+                  </Button>
+                </div>
+                <br></br>
+                <h5>Responses to {tr.title}:</h5>
                 {tr.responses.length === 0 ? (
                   <p>
                     <strong>None yet! Check back later.</strong>
@@ -266,17 +250,17 @@ export default function Profile({ user, setUser }) {
                           backgroundColor: "#f9f9f9",
                         }}
                       >
-                        <p>Respondent user: {response.owner.firstName}</p>
-                        <p>
-                          Response created:{" "}
+                        <p className="mb-2"><strong>Respondent user:</strong> {response.owner.firstName}</p>
+                        <p className="mb-2">
+                          <strong>Response created:</strong>{" "}
                           {safeFormattedDate(new Date(response.updatedAt), {
                             addSuffix: true,
                           })}
                         </p>
-                        <p>Counteroffering: ${response.counterOfferPrice}</p>
-                        <p>Distance: {response.distance} miles</p>
-                        <p>
-                          Phone number:{" "}
+                        <p className="mb-2"><strong>Counteroffering:</strong> ${response.counterOfferPrice}</p>
+                        <p className="mb-2"><strong>Distance:</strong> {response.distance} miles</p>
+                        <p className="mb-2">
+                          <strong>Phone number:</strong>{" "}
                           {formatPhoneNumber(response.owner.phone)}
                         </p>
                       </li>
@@ -290,7 +274,7 @@ export default function Profile({ user, setUser }) {
       </section>
 
       <section>
-        <h2>{user.firstName}'s Responses to Tool Requests</h2>
+        <h2 style={{textDecoration: "underline"}}>{user.firstName}'s Responses to Tool Requests</h2>
         {loading ? (
           <p>Loading responses...</p>
         ) : myResponses.length === 0 ? (
@@ -309,31 +293,39 @@ export default function Profile({ user, setUser }) {
                 }}
               >
                 {response.originalTR === null ? (
-                  <div style={{display: "flex", alignItems: "center", gap: "1rem", justifyContent: "space-between"}}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <p>This Tool Request was deleted</p>
-                    <button
+                    <Button
                       onClick={() => handleDeleteResponse(response._id)}
-                      style={{
-                        marginTop: "1rem",
-                        backgroundColor: "#dc3545",
-                        color: "#fff",
-                        border: "none",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
+                      // style={{
+                      //   marginTop: "1rem",
+                      //   backgroundColor: "#dc3545",
+                      //   color: "#fff",
+                      //   border: "none",
+                      //   padding: "0.5rem 1rem",
+                      //   borderRadius: "4px",
+                      //   cursor: "pointer",
+                      // }}
+                      variant="danger"
                     >
                       Delete Response
-                    </button>
+                    </Button>
                   </div>
                 ) : (
                   <>
                     <h1>{response.originalTR.title}</h1>
-                    <p>
+                    <p className="mb-2">
                       <strong>Requested by:</strong>{" "}
                       {response.originalTR.createdBy.firstName}
                     </p>
-                    <p>
+                    <p className="mb-2">
                       <strong>Tool requested:</strong>{" "}
                       {safeFormattedDate(
                         new Date(response.originalTR.updatedAt),
@@ -342,26 +334,26 @@ export default function Profile({ user, setUser }) {
                         }
                       )}
                     </p>
-                    <p>
+                    <p className="mb-2">
                       <strong>Responded:</strong>{" "}
                       {safeFormattedDate(new Date(response.updatedAt), {
                         addSuffix: true,
                       })}
                     </p>
-                    <p>
+                    <p className="mb-2">
                       <strong>Time needed:</strong>{" "}
                       {response.originalTR.timeNeeded}
                     </p>
-                    <p>
+                    <p className="mb-2">
                       <strong>First offer price:</strong> $
                       {response.originalTR.firstOfferPrice}
                     </p>
-                    <p>
+                    <p className="mb-2">
                       <strong>Your counteroffer:</strong> $
                       {response.counterOfferPrice}
                     </p>
                     {response.originalTR.pictureUrl && (
-                      <div style={{ marginTop: "10px" }}>
+                      <div style={{ margin: "10px auto" }}>
                         <img
                           src={`${response.originalTR.pictureUrl}.jpg`}
                           alt="Tool"
@@ -373,20 +365,21 @@ export default function Profile({ user, setUser }) {
                         />
                       </div>
                     )}
-                    <button
+                    <Button
                       onClick={() => handleDeleteResponse(response._id)}
-                      style={{
-                        marginTop: "1rem",
-                        backgroundColor: "#dc3545",
-                        color: "#fff",
-                        border: "none",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
+                      // style={{
+                      //   marginTop: "1rem",
+                      //   backgroundColor: "#dc3545",
+                      //   color: "#fff",
+                      //   border: "none",
+                      //   padding: "0.5rem 1rem",
+                      //   borderRadius: "4px",
+                      //   cursor: "pointer",
+                      // }}
+                      variant="danger"
                     >
                       Delete Response
-                    </button>
+                    </Button>
                   </>
                 )}
               </li>
