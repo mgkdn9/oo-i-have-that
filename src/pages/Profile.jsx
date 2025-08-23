@@ -74,6 +74,13 @@ export default function Profile({ user, setUser }) {
         setMyResponses((prevResponses) =>
           prevResponses.filter((r) => r._id !== responseId)
         );
+        // Also remove from myRequests.tr.responses
+        setMyRequests((prevRequests) =>
+          prevRequests.map((tr) => ({
+            ...tr,
+            responses: tr.responses.filter((r) => r._id !== responseId),
+          }))
+        );
         toast.update(toastId, {
           render: "Response deleted successfully",
           type: "success",
@@ -173,7 +180,9 @@ export default function Profile({ user, setUser }) {
       </div>
 
       <section>
-        <h2 style={{textDecoration: "underline"}}>{user.firstName}'s Tool Requests</h2>
+        <h2 style={{ textDecoration: "underline" }}>
+          {user.firstName}'s Tool Requests
+        </h2>
         {loading ? (
           <p>Loading tool requests...</p>
         ) : myRequests.length === 0 ? (
@@ -238,7 +247,15 @@ export default function Profile({ user, setUser }) {
                     <strong>None yet! Check back later.</strong>
                   </p>
                 ) : (
-                  <ul style={{ listStyleType: "none", paddingLeft: 0 }}>
+                  <ul
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                      listStyleType: "none",
+                      paddingLeft: 0,
+                    }}
+                  >
                     {tr.responses.map((response) => (
                       <li
                         key={response._id}
@@ -250,19 +267,34 @@ export default function Profile({ user, setUser }) {
                           backgroundColor: "#f9f9f9",
                         }}
                       >
-                        <p className="mb-2"><strong>Respondent user:</strong> {response.owner.firstName}</p>
+                        <p className="mb-2">
+                          <strong>Respondent user:</strong>{" "}
+                          {response.owner.firstName}
+                        </p>
                         <p className="mb-2">
                           <strong>Response created:</strong>{" "}
                           {safeFormattedDate(new Date(response.updatedAt), {
                             addSuffix: true,
                           })}
                         </p>
-                        <p className="mb-2"><strong>Counteroffering:</strong> ${response.counterOfferPrice}</p>
-                        <p className="mb-2"><strong>Distance:</strong> {response.distance} miles</p>
+                        <p className="mb-2">
+                          <strong>Counteroffering:</strong> $
+                          {response.counterOfferPrice}
+                        </p>
+                        <p className="mb-2">
+                          <strong>Distance:</strong> {response.distance} miles
+                        </p>
                         <p className="mb-2">
                           <strong>Phone number:</strong>{" "}
                           {formatPhoneNumber(response.owner.phone)}
                         </p>
+
+                        <Button
+                          onClick={() => handleDeleteResponse(response._id)}
+                          variant="danger"
+                        >
+                          Delete Response
+                        </Button>
                       </li>
                     ))}
                   </ul>
@@ -274,7 +306,9 @@ export default function Profile({ user, setUser }) {
       </section>
 
       <section>
-        <h2 style={{textDecoration: "underline"}}>{user.firstName}'s Responses to Tool Requests</h2>
+        <h2 style={{ textDecoration: "underline" }}>
+          {user.firstName}'s Responses to Tool Requests
+        </h2>
         {loading ? (
           <p>Loading responses...</p>
         ) : myResponses.length === 0 ? (
@@ -304,15 +338,6 @@ export default function Profile({ user, setUser }) {
                     <p>This Tool Request was deleted</p>
                     <Button
                       onClick={() => handleDeleteResponse(response._id)}
-                      // style={{
-                      //   marginTop: "1rem",
-                      //   backgroundColor: "#dc3545",
-                      //   color: "#fff",
-                      //   border: "none",
-                      //   padding: "0.5rem 1rem",
-                      //   borderRadius: "4px",
-                      //   cursor: "pointer",
-                      // }}
                       variant="danger"
                     >
                       Delete Response
@@ -367,15 +392,6 @@ export default function Profile({ user, setUser }) {
                     )}
                     <Button
                       onClick={() => handleDeleteResponse(response._id)}
-                      // style={{
-                      //   marginTop: "1rem",
-                      //   backgroundColor: "#dc3545",
-                      //   color: "#fff",
-                      //   border: "none",
-                      //   padding: "0.5rem 1rem",
-                      //   borderRadius: "4px",
-                      //   cursor: "pointer",
-                      // }}
                       variant="danger"
                     >
                       Delete Response

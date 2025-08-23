@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Card, Form, Button, Alert, InputGroup } from "react-bootstrap";
 
 export default function RequestTool({ user }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const toolRequest = location.state?.tr; // if coming from 'Edit Request' button
+  const toolRequest = location.state?.tr;
 
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
@@ -12,7 +13,6 @@ export default function RequestTool({ user }) {
   const [firstOfferPrice, setFirstOfferPrice] = useState("");
   const [pictureUrl, setPictureUrl] = useState("");
 
-  // prefill form if editing
   useEffect(() => {
     if (toolRequest) {
       setTitle(toolRequest.title);
@@ -24,12 +24,10 @@ export default function RequestTool({ user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const url = toolRequest
-        ? `${process.env.REACT_APP_API_URL}/toolRequests/${toolRequest._id}` // edit
-        : `${process.env.REACT_APP_API_URL}/createToolRequest`; // new
-
+        ? `${process.env.REACT_APP_API_URL}/toolRequests/${toolRequest._id}`
+        : `${process.env.REACT_APP_API_URL}/createToolRequest`;
       const method = toolRequest ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -45,7 +43,6 @@ export default function RequestTool({ user }) {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         setError(data.error || "Error submitting tool request");
       } else {
@@ -55,71 +52,94 @@ export default function RequestTool({ user }) {
       setError("Server error");
     }
   };
+
   return (
-    <div style={{margin: "10px"}}>
-      <h2 style={{ textDecoration: "underline" }}>Request a Tool</h2>
-      <h3>
-        Tell other users what tool you're looking for and see if anyone has one
-        for you to rent.
-      </h3>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Title:</label>
-          <br />
-          <input
-            type="text"
-            id="title"
-            className="request-tool-input"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
+    <div className="d-flex justify-content-center mt-2 px-3">
+      <Card
+        style={{ maxWidth: "600px", width: "100%" }}
+        className="shadow mb-2"
+      >
+        <Card.Body>
+          <Card.Subtitle className="mb-3 text-muted">
+            {toolRequest ? "Edit Tool Request" : "Request a Tool"}
+          </Card.Subtitle>
+          <Card.Title className="mb-3 fs-3">
+            {toolRequest ? toolRequest.title : ""}
+          </Card.Title>
 
-        <div style={{ marginTop: "0.5rem" }}>
-          <label htmlFor="timeNeeded">Time Needed:</label>
-          <br />
-          <input
-            type="text"
-            id="timeNeeded"
-            className="request-tool-input"
-            value={timeNeeded}
-            onChange={(e) => setTimeNeeded(e.target.value)}
-            required
-          />
-        </div>
+          {pictureUrl && (
+            <div className="text-center mb-3">
+              <img
+                src={`${pictureUrl}.jpg`}
+                alt="Tool"
+                style={{ maxHeight: "200px", borderRadius: "4px" }}
+              />
+            </div>
+          )}
 
-        <div style={{ marginTop: "0.5rem" }}>
-          <label htmlFor="firstOfferPrice">First Offer Price:</label>
-          <br />
-          <input
-            type="text"
-            id="firstOfferPrice"
-            className="request-tool-input"
-            value={firstOfferPrice}
-            onChange={(e) => setFirstOfferPrice(e.target.value)}
-            required
-          />
-        </div>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="title">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter tool title"
+                required
+              />
+            </Form.Group>
 
-        <div style={{ marginTop: "0.5rem" }}>
-          <label htmlFor="pictureUrl">Picture URL:</label>
-          <br />
-          <input
-            type="url"
-            id="pictureUrl"
-            className="request-tool-input"
-            value={pictureUrl}
-            onChange={(e) => setPictureUrl(e.target.value)}
-          />
-        </div>
+            <Form.Group className="mb-3" controlId="timeNeeded">
+              <Form.Label>Time Needed</Form.Label>
+              <Form.Control
+                type="text"
+                value={timeNeeded}
+                onChange={(e) => setTimeNeeded(e.target.value)}
+                placeholder="E.g., 2 days"
+                required
+              />
+            </Form.Group>
 
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          {toolRequest ? "Save Changes" : "Submit"}
-        </button>
-      </form>
+            <Form.Group className="mb-3" controlId="firstOfferPrice">
+              <Form.Label>First Offer Price</Form.Label>
+              <InputGroup>
+                <InputGroup.Text>$</InputGroup.Text>
+                <Form.Control
+                  type="number"
+                  value={firstOfferPrice}
+                  onChange={(e) => setFirstOfferPrice(e.target.value)}
+                  placeholder="Enter your offer"
+                  required
+                />
+              </InputGroup>
+            </Form.Group>
 
-      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+            <Form.Group className="mb-3" controlId="pictureUrl">
+              <Form.Label>Picture URL (optional)</Form.Label>
+              <Form.Control
+                type="url"
+                value={pictureUrl}
+                onChange={(e) => setPictureUrl(e.target.value)}
+              />
+            </Form.Group>
+
+            <div className="d-flex justify-content-end gap-2">
+              <Button variant="secondary" onClick={() => navigate("/profile")}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary">
+                {toolRequest ? "Save Changes" : "Submit Request"}
+              </Button>
+            </div>
+          </Form>
+
+          {error && (
+            <Alert variant="danger" className="mt-3">
+              {error}
+            </Alert>
+          )}
+        </Card.Body>
+      </Card>
     </div>
   );
 }
